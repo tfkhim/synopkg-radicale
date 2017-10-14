@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Radicale for Synology DSM
+#
+# Copyright (C) 2017 Thomas Himmelstoss
+#
+# This software may be freely distributed under the MIT license. You should
+# have received a copy of the MIT License along with this program.
+
+BUILD_DIR="${PWD}/build"
+
+rm -rf "${BUILD_DIR}" && mkdir -p "${BUILD_DIR}"
+
+cp -av "${PWD}/modules" "${BUILD_DIR}/lib"
+

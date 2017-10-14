@@ -1,0 +1,10 @@
+# Radicale for Synology DSM
+#
+# Copyright (C) 2017 Thomas Himmelstoss
+#
+# This software may be freely distributed under the MIT license. You should
+# have received a copy of the MIT License along with this program.
+
+[default]
+all="6.0"
+
