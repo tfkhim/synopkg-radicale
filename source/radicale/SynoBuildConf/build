@@ -15,4 +15,5 @@ cp -av "${PWD}/modules" "${BUILD_DIR}/lib"
 
 cp "${PWD}/radicale.config" "${BUILD_DIR}"
 cp "${PWD}/radicale.users" "${BUILD_DIR}"
+cp "${PWD}/logging.config" "${BUILD_DIR}"
 
