@@ -7,17 +7,37 @@
 # This software may be freely distributed under the MIT license. You should
 # have received a copy of the MIT License along with this program.
 
+PID_FILE="/tmp/radicale.pid"
+PYTHON="$(which python3)"
+
 log() {
-    echo "INFO: $1"
+    echo "[INFO] $1"
 }
 
 start_radicale() {
     log "Starting Radicale"
     log "SYNOPKG_PKGDEST=${SYNOPKG_PKGDEST}"
+    log "PYTHON=${PYTHON}"
+
+    local pymodules="${SYNOPKG_PKGDEST}/lib"
+    local configfile="${SYNOPKG_PKGDEST}/radicale.conf"
+
+    log "pymodules=${pymodules}"
+    log "configfile=${configfile}"
+
+    PYTHONPATH="${pymodules}" ${PYTHON} -m radicale --config "${configfile}"
 }
 
 stop_radicale() {
     log "Stopping Radicale"
+
+    log "PID_FILE=${PID_FILE}"
+
+    local pid="$(cat ${PID_FILE})"
+
+    log "pid=${pid}"
+
+    /bin/kill -HUP "${pid}"
 }
 
 case $1 in

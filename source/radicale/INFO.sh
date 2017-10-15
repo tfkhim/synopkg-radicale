@@ -10,11 +10,14 @@
 source /pkgscripts/include/pkg_util.sh
 
 package="radicale"
-version="0.1.0"
+version="2.1.8-1"
 displayname="Radicale"
 maintainer="Thomas Himmelstoss"
 arch="$(pkg_get_unified_platform)"
 description="CardDAV and CalDAV server implemented in Python"
+
+thirdparty="yes"
+install_dep_packages="py3k"
 
 [ "$(caller)" != "0 NULL" ] && return 0
 pkg_dump_info
