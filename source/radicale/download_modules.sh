@@ -7,11 +7,9 @@
 # This software may be freely distributed under the MIT license. You should
 # have received a copy of the MIT License along with this program.
 
-git clone https://github.com/SynologyOpenSource/pkgscripts-ng.git pkgscripts-ng
+MODULE_TARGET="$(dirname $0)/modules"
 
-${PWD}/pkgscripts/EnvDeploy -v 6.0 -p armadaxp
+mkdir -p "${MODULE_TARGET}"
 
-${PWD}/source/radicale/download_modules.sh
-
-echo "INSTALL A VALID GPG KEY"
+pip install "--target=${MODULE_TARGET}" "radicale==2.1.8"
 

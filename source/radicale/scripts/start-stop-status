@@ -7,12 +7,17 @@
 # This software may be freely distributed under the MIT license. You should
 # have received a copy of the MIT License along with this program.
 
-start_radicale() {
+log() {
+    echo "INFO: $1"
+}
 
+start_radicale() {
+    log "Starting Radicale"
+    log "SYNOPKG_PKGDEST=${SYNOPKG_PKGDEST}"
 }
 
 stop_radicale() {
-
+    log "Stopping Radicale"
 }
 
 case $1 in

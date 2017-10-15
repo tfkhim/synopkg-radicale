@@ -10,7 +10,7 @@
 source /pkgscripts/include/pkg_util.sh
 
 package="radicale"
-version="1.0.0"
+version="0.1.0"
 displayname="Radicale"
 maintainer="Thomas Himmelstoss"
 arch="$(pkg_get_unified_platform)"
