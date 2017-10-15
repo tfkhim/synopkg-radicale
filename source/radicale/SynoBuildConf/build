@@ -13,7 +13,7 @@ rm -rf "${BUILD_DIR}" && mkdir -p "${BUILD_DIR}"
 
 cp -av "${PWD}/modules" "${BUILD_DIR}/lib"
 
-cp "${PWD}/radicale.config" "${BUILD_DIR}"
+cp "${PWD}/radicale.conf" "${BUILD_DIR}"
 cp "${PWD}/radicale.users" "${BUILD_DIR}"
-cp "${PWD}/logging.config" "${BUILD_DIR}"
+cp "${PWD}/logging.conf" "${BUILD_DIR}"
 
