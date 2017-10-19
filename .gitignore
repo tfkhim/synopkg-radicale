@@ -1,8 +1,4 @@
-/build_env
-/pkgscripts-ng
-/toolkit_tarballs
-
-/envdeploy.log
-/envdeploy.log.old
-/pkgcreate.log
-/pkgcreate.log.old
+/modules
+/build
+/package
+/packages
