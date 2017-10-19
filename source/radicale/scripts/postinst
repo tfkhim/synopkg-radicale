@@ -7,5 +7,18 @@
 # This software may be freely distributed under the MIT license. You should
 # have received a copy of the MIT License along with this program.
 
+PYTHON="$(which python3)"
+
+echo "Creating virtual environment..."
+${PYTHON} "${SYNOPKG_PKGDEST}/virtualenv/virtualenv.py" --no-download "${SYNOPKG_PKGDEST}/radicale-env"
+
+echo "Installing wheels ..."
+"${SYNOPKG_PKGDEST}/radicale-env/bin/pip" install --no-index "${SYNOPKG_PKGDEST}"/wheels/*.whl
+
+# Cleanup of no longer needed data
+echo "Removing obsolete data..."
+rm -rf "${SYNOPKG_PKGDEST}/virtualenv" 
+rm -rf "${SYNOPKG_PKGDEST}/wheels" 
+
 exit 0
 
