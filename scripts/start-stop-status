@@ -13,7 +13,23 @@ log() {
     echo "[INFO] $1"
 }
 
+kill_active_servers() {
+    log "Killing still active server processes"
+
+    local pids="$(/bin/ps aux \
+                  | grep 'python3.* -m radicale' \
+		  | grep -v grep \
+		  | awk '{print $2}')"
+
+    for pid in ${pids}; do
+        log "Terminating process with pid ${pid}"
+	/bin/kill -TERM "${pid}"
+    done
+}
+
 start_radicale() {
+    kill_active_servers
+
     log "Starting Radicale"
     log "SYNOPKG_PKGDEST=${SYNOPKG_PKGDEST}"
 
@@ -33,11 +49,16 @@ stop_radicale() {
 
     log "PID_FILE=${PID_FILE}"
 
-    local pid="$(cat ${PID_FILE})"
+    if [ -f "${PID_FILE}" ]; then
+        local pid="$(cat ${PID_FILE})"
 
-    log "pid=${pid}"
+        log "Stopping process with pid ${pid}"
 
-    /bin/kill -TERM "${pid}"
+        /bin/kill -TERM "${pid}"
+    else
+        kill_active_servers
+    fi
+
 }
 
 case $1 in
