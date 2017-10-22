@@ -11,6 +11,7 @@ VIRTUAL_ENV_URL="https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b
 VIRTUAL_ENV_MD5="44e19f4134906fe2d75124427dc9b716"
 
 BUILD_DIR="${PWD}/build"
+SRC_DIR="${PWD}/src"
 PYTHON="$(which python3)"
 
 # Reset the build directory
@@ -41,4 +42,7 @@ ${PYTHON} "${BUILD_DIR}/virtualenv/virtualenv.py" "${PWD}/build-env"
 cp "${PWD}/radicale.conf" "${BUILD_DIR}"
 cp "${PWD}/radicale.users" "${BUILD_DIR}"
 cp "${PWD}/logging.conf" "${BUILD_DIR}"
+
+mkdir -p "${BUILD_DIR}/bin"
+"${CC}" -std=c99 -o "${BUILD_DIR}/bin/pam_auth" -lpam "${SRC_DIR}/pam_auth.c"
 
