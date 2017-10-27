@@ -11,6 +11,12 @@
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 
+#ifndef AUTH_SERVICE
+#define AUTH_SERVICE "login"
+#endif
+
+static const char* auth_service = AUTH_SERVICE;
+
 int main(int argc, const char* argv[]) {
     if (argc < 2) {
         printf("Error: The user name must be given as first argument\n");
@@ -20,7 +26,7 @@ int main(int argc, const char* argv[]) {
     const struct pam_conv pam_conversation = {misc_conv, NULL};
 
     pam_handle_t* handle = NULL;
-    int status = pam_start("login", argv[1], &pam_conversation, &handle);
+    int status = pam_start(auth_service, argv[1], &pam_conversation, &handle);
 
     if (status != PAM_SUCCESS) {
         printf("Error: Could not start transaction\n");

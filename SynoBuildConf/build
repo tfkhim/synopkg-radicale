@@ -44,5 +44,5 @@ cp "${PWD}/radicale.users" "${BUILD_DIR}"
 cp "${PWD}/logging.conf" "${BUILD_DIR}"
 
 mkdir -p "${BUILD_DIR}/bin"
-"${CC}" -std=c99 -o "${BUILD_DIR}/bin/pam_auth" -lpam "${SRC_DIR}/pam_auth.c"
+"${CC}" -std=c99 -o "${BUILD_DIR}/bin/pam_auth" -lpam -lpam_misc "${SRC_DIR}/pam_auth.c"
 
