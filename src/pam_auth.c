@@ -11,11 +11,14 @@
 #include <security/pam_appl.h>
 #include <security/pam_misc.h>
 
+#define STRING_VALUE(arg) #arg
+#define TO_STRING(arg) STRING_VALUE(arg)
+
 #ifndef AUTH_SERVICE
-#define AUTH_SERVICE "login"
+#define AUTH_SERVICE login
 #endif
 
-static const char* auth_service = AUTH_SERVICE;
+static const char* auth_service = TO_STRING(AUTH_SERVICE);
 
 int main(int argc, const char* argv[]) {
     if (argc < 2) {
