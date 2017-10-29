@@ -10,39 +10,82 @@
 VIRTUAL_ENV_URL="https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz"
 VIRTUAL_ENV_MD5="44e19f4134906fe2d75124427dc9b716"
 
+# The PWD variable begins with a double slash (e. g. //source/...). This
+# causes pip to fail. So we remove it by using readlink
+PWD=$(readlink -m ${PWD})
+
+# Set some often needed environment variables.
 BUILD_DIR="${PWD}/build"
 SRC_DIR="${PWD}/src"
 PYTHON="$(which python3)"
+BUILD_ENV="${PWD}/build-env"
+PIP="${BUILD_ENV}/bin/pip"
 
-# Reset the build directory
-rm -rf "${BUILD_DIR}" && mkdir -p "${BUILD_DIR}/wheels"
+echo "---------------------------------------------------------------"
+echo "Clear the build directory"
+echo "---------------------------------------------------------------"
 
-# Download the virtualenv python package and check its MD5 value.
+rm -vrf "${BUILD_DIR}" && mkdir -vp "${BUILD_DIR}/wheels"
+
+echo "---------------------------------------------------------------"
+echo "Download virtualenv tarball"
+echo "---------------------------------------------------------------"
+
 wget --no-check-certificate "--directory-prefix=${PWD}" "${VIRTUAL_ENV_URL}"
 
 VIRTUAL_ENV_VERSION="$(ls "${PWD}"/virtualenv-*.tar.gz | awk 'match($0, /virtualenv-(.*).tar.gz/, v) {print v[1]}')"
 echo "Version of virtualenv is: ${VIRTUAL_ENV_VERSION}"
+
+echo "---------------------------------------------------------------"
+echo "Check virtualenv tarball hash"
+echo "---------------------------------------------------------------"
 
 DOWNLOAD_MD5="$(md5sum "${PWD}/virtualenv-${VIRTUAL_ENV_VERSION}.tar.gz" | awk '{print $1}')"
 
 if [ "${VIRTUAL_ENV_MD5}" != "${DOWNLOAD_MD5}" ]; then
     echo "Hash of download doesn't match expected value"
     exit 1
+else
+    echo "Download successful, hashes match!"
 fi
 
-# Extract the tarball and move it to the build directory
+echo "---------------------------------------------------------------"
+echo "Extract virtualenv tarball"
+echo "---------------------------------------------------------------"
+
 tar -xvzf "${PWD}/virtualenv-${VIRTUAL_ENV_VERSION}.tar.gz"
 mv "${PWD}/virtualenv-${VIRTUAL_ENV_VERSION}" "${BUILD_DIR}/virtualenv"
 
-# Create a new python environment and install the required wheels.
-${PYTHON} "${BUILD_DIR}/virtualenv/virtualenv.py" "${PWD}/build-env"
+echo "---------------------------------------------------------------"
+echo "Create new python virtual environment"
+echo "---------------------------------------------------------------"
 
-"${PWD}/build-env/bin/pip" wheel --wheel-dir "${BUILD_DIR}/wheels" "radicale==2.1.8"
+${PYTHON} "${BUILD_DIR}/virtualenv/virtualenv.py" "${BUILD_ENV}"
 
-cp "${PWD}/radicale.conf" "${BUILD_DIR}"
-cp "${PWD}/radicale.users" "${BUILD_DIR}"
-cp "${PWD}/logging.conf" "${BUILD_DIR}"
+echo "---------------------------------------------------------------"
+echo "Create Radicale wheel distributions"
+echo "---------------------------------------------------------------"
+
+"${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "radicale==2.1.8"
+
+echo "---------------------------------------------------------------"
+echo "Build PAM helper program"
+echo "---------------------------------------------------------------"
 
 mkdir -p "${BUILD_DIR}/bin"
-"${CC}" -std=c99 -o "${BUILD_DIR}/bin/pam_auth" -lpam -lpam_misc "${SRC_DIR}/pam_auth.c"
+"${CC}" -v -std=c99 -o "${BUILD_DIR}/bin/pam_auth" -lpam -lpam_misc "${SRC_DIR}/pam_auth.c"
+
+echo "---------------------------------------------------------------"
+echo "Building Radicale authentication plugin"
+echo "---------------------------------------------------------------"
+
+"${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "${SRC_DIR}"
+
+echo "---------------------------------------------------------------"
+echo "Copy configuration files to the build directory"
+echo "---------------------------------------------------------------"
+
+cp -v "${PWD}/radicale.conf" "${BUILD_DIR}"
+cp -v "${PWD}/radicale.users" "${BUILD_DIR}"
+cp -v "${PWD}/logging.conf" "${BUILD_DIR}"
 
