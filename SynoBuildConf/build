@@ -85,6 +85,7 @@ echo "---------------------------------------------------------------"
 echo "Copy configuration files to the build directory"
 echo "---------------------------------------------------------------"
 
-cp -v "${PWD}/radicale.conf" "${BUILD_DIR}"
-cp -v "${PWD}/logging.conf" "${BUILD_DIR}"
+cp -av "${PWD}/radicale.conf" "${BUILD_DIR}"
+cp -av "${PWD}/logging.conf" "${BUILD_DIR}"
+cp -av "${PWD}/etc" "${BUILD_DIR}/etc"
 

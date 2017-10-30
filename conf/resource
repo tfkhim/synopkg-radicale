@@ -1,0 +1,20 @@
+{
+
+  "syslog-config" : {
+    "patterndb-relpath" : "etc/syslog-ng.conf",
+    "logrotate-relpath" : "etc/logrotate.conf"
+  },
+
+  "data-share" : {
+    "shares" : [
+      {
+        "name" : "radicale_data",
+        "permission" : {
+          "ro" : ["admin"],
+          "rw" : ["radicale"]
+        }
+      }
+    ]
+  }
+
+}

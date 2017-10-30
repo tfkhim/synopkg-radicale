@@ -1,0 +1,15 @@
+{
+  "username" : "radicale",
+  "groupname" : "radicale",
+  "defaults" : {
+    "run-as" : "package"
+  },
+  "tool" : [
+    {
+      "relpath" : "bin/pam_auth",
+      "user" : "root",
+      "group" : "package",
+      "permission" : "4750"
+    }
+  ]
+}
