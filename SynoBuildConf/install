@@ -9,7 +9,7 @@
 
 BUILD_DIR="${PWD}/build"
 PKG_DIR="${PWD}/package_build"
-PKG_DEST="${PWD}/packages"
+PKG_DEST="/image/packages"
 
 rm -rf "${PKG_DIR}" && mkdir -p "${PKG_DIR}"
 
@@ -24,11 +24,14 @@ create_inner_tarball() {
 create_spk() {
     local scripts_dir="${PKG_DIR}/scripts"
 
-    mkdir -p "${scripts_dir}"
+    mkdir -vp "${scripts_dir}"
 
     cp -av scripts/* "${scripts_dir}"
 
-    ${PWD}/INFO.sh > "${PKG_DIR}/INFO"
+    # The code signing step expects a copy of the INFO file in the
+    # project root directory which is the current working directory.
+    "${PWD}/INFO.sh" > "${PWD}/INFO"
+    cp -av "${PWD}/INFO" "${PKG_DIR}/INFO"
 
     pkg_make_spk "${PKG_DIR}" "${PKG_DEST}" $(pkg_get_spk_family_name)
 }
