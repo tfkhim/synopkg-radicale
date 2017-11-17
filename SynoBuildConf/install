@@ -16,6 +16,17 @@ rm -rf "${PKG_DIR}" && mkdir -p "${PKG_DIR}"
 mkdir -p "${PKG_DEST}"
 
 source /pkgscripts/include/pkg_util.sh
+source "${PWD}/build_vars.sh"
+
+format_files() {
+    for file in $*; do
+        cp -av "${file}" "${file::-3}"
+        sed -i "${file::-3}" \
+	       -e "s/@@PKG_USER@@/${PKG_USER}/g" \
+               -e "s/@@PKG_GROUP@@/${PKG_GROUP}/g" \
+               -e "s/@@SHARE_NAME@@/${SHARE_NAME}/g"
+    done
+}
 
 create_inner_tarball() {
     pkg_make_inner_tarball "${BUILD_DIR}" "${PKG_DIR}"
@@ -30,6 +41,12 @@ create_spk() {
 
     cp -av scripts/* "${scripts_dir}"
     cp -av conf/* "${conf_dir}"
+
+    format_files "${scripts_dir}"/*.in
+    rm "${scripts_dir}"/*.in
+
+    format_files "${conf_dir}"/*.in
+    rm "${conf_dir}"/*.in
 
     # The code signing step expects a copy of the INFO file in the
     # project root directory which is the current working directory.

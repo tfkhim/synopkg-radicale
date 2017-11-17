@@ -8,9 +8,10 @@
 # have received a copy of the MIT License along with this program.
 
 source /pkgscripts/include/pkg_util.sh
+source "${PWD}/build_vars.sh"
 
 package="radicale"
-version="2.1.8-1"
+version="${RADICALE_VERSION}-${PKG_BUILD_VERSION}"
 displayname="Radicale"
 maintainer="Thomas Himmelstoss"
 arch="$(pkg_get_unified_platform)"

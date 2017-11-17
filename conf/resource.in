@@ -8,10 +8,10 @@
   "data-share" : {
     "shares" : [
       {
-        "name" : "radicale_data",
+        "name" : "@@SHARE_NAME@@",
         "permission" : {
           "ro" : ["admin"],
-          "rw" : ["radicale"]
+          "rw" : ["@@PKG_USER@@"]
         }
       }
     ]

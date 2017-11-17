@@ -7,10 +7,49 @@
 # This software may be freely distributed under the MIT license. You should
 # have received a copy of the MIT License along with this program.
 
+SHARE_NAME="@@SHARE_NAME@@"
+
 PID_FILE="/tmp/radicale.pid"
+CONF_FILE="/tmp/radicale.conf"
 
 log() {
     echo "[INFO] $1"
+}
+
+write_config_file() {
+    local share_path=""
+    for vol in $(ls / | grep 'volume'); do
+        if [ -d "/${vol}/${SHARE_NAME}" ]; then
+            share_path="/${vol}/${SHARE_NAME}"
+        fi
+    done
+
+    if [ "x${share_path}" == "x" ]; then
+        log "Could not find share volume"
+        return 1
+    else
+        log "Absolute share path is: ${share_path}"
+    fi
+
+   cat >"$CONF_FILE" <<EOF
+[auth]
+type = radicale_pam_auth
+cmd = ${SYNOPKG_PKGDEST}/bin/pam_auth
+
+[server]
+hosts = 127.0.0.1:5555
+daemon = True
+pid = ${PID_FILE}
+
+[storage]
+filesystem_folder = ${share_path}
+
+[logging]
+mask_passwords = True
+config = ${SYNOPKG_PKGDEST}/logging.conf
+EOF
+
+    return 0
 }
 
 kill_active_servers() {
@@ -35,12 +74,13 @@ start_radicale() {
 
     local python="${SYNOPKG_PKGDEST}/radicale-env/bin/python3"
     local pymodules="${SYNOPKG_PKGDEST}/lib"
-    local configfile="${SYNOPKG_PKGDEST}/radicale.conf"
+    local configfile="${CONF_FILE}"
 
     log "python=${python}"
     log "pymodules=${pymodules}"
     log "configfile=${configfile}"
 
+    write_config_file
     PYTHONPATH="${pymodules}" "${python}" -m radicale --config "${configfile}"
 }
 

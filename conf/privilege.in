@@ -1,6 +1,6 @@
 {
-  "username" : "radicale",
-  "groupname" : "radicale",
+  "username" : "@@PKG_USER@@",
+  "groupname" : "@@PKG_GROUP@@",
   "defaults" : {
     "run-as" : "package"
   },
