@@ -1,25 +1,35 @@
-# synopkg-radicale
+synopkg-radicale
+================
+
 Packaging of Radicale for Synology DSM
 
 Setup
 -----
 
-Create a build directory. Change to the new directory.
+Perform the steps described by the [Syonolgy Developer Documentation.](https://developer.synology.com/developer-guide/create_package/prepare.html)
 
-Clone the Synology packaging scripts:
+The basic steps are:
 
-git clone https://github.com/SynologyOpenSource/pkgscripts-ng.git pkgscripts-ng
+1. Create a build directory.
+2. Change to the new directory.
+3. Clone the Synology packaging scripts:
 
-Create your build environment, e. g.:
+   `git clone https://github.com/SynologyOpenSource/pkgscripts-ng.git pkgscripts-ng`
 
-./pkgscripts/EnvDeploy -v 6.0 -p armadaxp
+4. Create your build environment, e. g.:
 
-Follow the further documentation on the Syonolgy website.
+   `./pkgscripts/EnvDeploy -v 6.0 -p armadaxp`
 
-Clone this project:
+5. Clone this project:
 
-git clone https://github.com/tfkhim/synopkg-radicale.git source/radicale
+   `git clone https://github.com/tfkhim/synopkg-radicale.git source/radicale`
 
 Build the package
+-----------------
 
-./pkgscripts/PkgCreate radicale
+Execute the following command
+
+```
+./pkgscripts/PkgCreate -c radicale
+```
+
