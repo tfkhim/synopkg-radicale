@@ -9,7 +9,7 @@
 
 source "${PWD}/build_vars.sh"
 
-VIRTUAL_ENV_URL="https://pypi.python.org/simple/virtualenv/"
+VIRTUAL_ENV_URL="https://pypi.python.org/packages/source/v/virtualenv"
 
 # The PWD variable begins with a double slash (e. g. //source/...). This
 # causes pip to fail. So we remove it by using readlink
@@ -35,15 +35,15 @@ echo "---------------------------------------------------------------"
 
 echo "Version of virtualenv is: ${VIRTUAL_ENV_VERSION}"
 
-wget --no-check-certificate "--directory-prefix=${PWD}" --recursive --no-directories "--accept=${VIRTUAL_ENV_PKG}" "${VIRTUAL_ENV_URL}"
+wget --no-check-certificate "--directory-prefix=${PWD}" "${VIRTUAL_ENV_URL}/${VIRTUAL_ENV_PKG}"
 
 echo "---------------------------------------------------------------"
 echo "Check virtualenv tarball hash"
 echo "---------------------------------------------------------------"
 
-DOWNLOAD_MD5="$(md5sum "${PWD}/${VIRTUAL_ENV_PKG}" | awk '{print $1}')"
+DOWNLOAD_SHA256="$(sha256sum "${PWD}/${VIRTUAL_ENV_PKG}" | awk '{print $1}')"
 
-if [ "${VIRTUAL_ENV_MD5}" != "${DOWNLOAD_MD5}" ]; then
+if [ "${VIRTUAL_ENV_SHA256}" != "${DOWNLOAD_SHA256}" ]; then
     echo "Hash of download doesn't match expected value"
     exit 1
 else
@@ -80,13 +80,12 @@ echo "---------------------------------------------------------------"
 echo "Building Radicale authentication plugin"
 echo "---------------------------------------------------------------"
 
-"${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "${SRC_DIR}"
+RADICALE_VERSION="${RADICALE_VERSION}" "${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "${SRC_DIR}"
 
 echo "---------------------------------------------------------------"
 echo "Copy configuration files to the build directory"
 echo "---------------------------------------------------------------"
 
-cp -av "${PWD}/radicale.conf" "${BUILD_DIR}"
 cp -av "${PWD}/logging.conf" "${BUILD_DIR}"
 cp -av "${PWD}/etc" "${BUILD_DIR}/etc"
 
