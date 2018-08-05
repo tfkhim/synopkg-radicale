@@ -10,11 +10,12 @@
 import os
 from setuptools import setup, find_packages
 
+radicalePamAuthVersion = os.environ["RADICALE_PAM_AUTH_VERSION"]
 radicaleVersion = os.environ["RADICALE_VERSION"]
 
 setup(
     name="radicale_pam_auth",
-    version=radicaleVersion,
+    version=radicalePamAuthVersion,
     description="A Radical authentication plugin using the linux PAM library",
     py_modules=["radicale_pam_auth"],
     packages=find_packages(),

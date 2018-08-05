@@ -80,7 +80,9 @@ echo "---------------------------------------------------------------"
 echo "Building Radicale authentication plugin"
 echo "---------------------------------------------------------------"
 
-RADICALE_VERSION="${RADICALE_VERSION}" "${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "${SRC_DIR}"
+RADICALE_VERSION="${RADICALE_VERSION}" \
+RADICALE_PAM_AUTH_VERSION="${RADICALE_PAM_AUTH_VERSION}" \
+"${PIP}" wheel --wheel-dir "${BUILD_DIR}/wheels" "${SRC_DIR}"
 
 echo "---------------------------------------------------------------"
 echo "Copy configuration files to the build directory"
